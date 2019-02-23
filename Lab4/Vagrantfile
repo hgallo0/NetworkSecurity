@@ -1,0 +1,30 @@
+Vagrant.configure("2") do |config|
+  config.vm.define "dns1" do |dns1|
+    dns1.vm.box = "ubuntu/precise64"
+    dns1.vm.provision :shell, path: "bootstrap.sh"
+    dns1.vm.hostname = 'dns1'
+    dns1.vm.box_url = "ubuntu/precise64"
+
+    dns1.vm.network :public_network, ip: "192.168.0.201"
+
+
+    dns1.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 512]
+    end
+  end
+
+  config.vm.define "dns2" do |dns2|
+    dns2.vm.box = "ubuntu/precise64"
+    dns2.vm.provision :shell, path: "bootstrapdns2.sh"
+    dns2.vm.hostname = 'dns2'
+    dns2.vm.box_url = "ubuntu/precise64"
+
+    dns2.vm.network :public_network, ip: "192.168.0.202"
+
+    dns2.vm.provider :virtualbox do |v|
+      v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      v.customize ["modifyvm", :id, "--memory", 512]
+    end
+  end
+end
