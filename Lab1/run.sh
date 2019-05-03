@@ -35,7 +35,6 @@ docker run -dt \
 --name mysql \
 -p 3306:3306 \
 --network=network-lab \
---ip=172.20.0.2 \
 -e MYSQL_ROOT_PASSWORD=test \
 -e MYSQL_USER=hgallo mysql
 
