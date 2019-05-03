@@ -28,10 +28,14 @@ echo "Cleaning env"
 docker stop mysql 2>&1 >/dev/null ; docker rm mysql 2>&1 >/dev/null
 docker stop site 2>&1 >/dev/null; docker rm site 2>&1 >/dev/null
 
+docker network create --subnet 172.20.0.0/16 --ip-range 172.20.240.0/20 network-lab
+
 echo "starting mysql"
 docker run -dt \
 --name mysql \
 -p 3306:3306 \
+--network=network-lab \
+--ip=172.20.0.2 \
 -e MYSQL_ROOT_PASSWORD=test \
 -e MYSQL_USER=hgallo mysql
 
@@ -39,9 +43,9 @@ echo "starting apache"
 docker run -dt \
 --name site \
 -p 80:80 \
+--network=network-lab \
 -v $(pwd)/config:/usr/local/etc/php \
 -v $(pwd)/html:/var/www/html \
---link mysql \
 hgallo/http-php:01
 
 sqlloader(){
